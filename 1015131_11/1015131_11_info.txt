@@ -1,0 +1,13 @@
+{
+  "contracts": [
+    {
+      "type": "Partial",
+      "id": 243546767,
+      "commencementDate": "2014-09-23",
+      "effectiveRent": "40",
+      "floorSequence": "Partial 11"
+    }
+  ],
+  "floorNum": 11,
+  "floorElev": 144.48719940185546
+}

@@ -1,0 +1,37 @@
+# Radiance scene description, created by Turan (10/4/2017)
+# Material definitions
+
+void plastic GenericCeiling_70
+0
+0
+5 0.7 0.7 0.7   0 0
+
+
+void plastic OutsideFacade_30
+0
+0
+5 0.30 0.30 0.30   0 0
+
+
+void plastic GenericFloor_20
+0
+0
+5 0.2 0.2 0.2 0 0
+
+
+void glass Glazing_SinglePane_88
+0
+0
+3 0.96 0.96 0.96
+
+
+void plastic OutsideGround_20
+0
+0
+5 0.2 0.2 0.2   0 0
+
+
+void plastic GenericInteriorWall_50
+0
+0
+5 0.5 0.5 0.5 0 0
