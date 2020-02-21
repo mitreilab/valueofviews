@@ -26,6 +26,11 @@ class database:
             print("Unable to connect to the database.")
 
     @staticmethod
+    def create_engine(database_type, username, password, host, database_name):
+        engine_string = database_type + '://' + username + ':' + password + '@' + host + '/' + database_name
+        return sqlalchemy.create_engine(engine_string)
+
+    @staticmethod
     def upload_table(table, name, engine, schema_name):
         engine = sqlalchemy.create_engine(engine) #, connect_args = {'schema':'sources'})
 
