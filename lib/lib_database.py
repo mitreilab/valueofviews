@@ -1,6 +1,6 @@
 # Library file for functions to connect to the REIL Database
 # (C) MIT Real Estate Innovation Lab, 2019
-#%% Imports:
+# %% Imports:
 import csv
 import os
 import pickle
@@ -14,12 +14,16 @@ import requests
 import sqlalchemy
 
 # module to execute database connection
+from sqlalchemy import exists, select
+from sqlalchemy.orm import session
+
+
 class database:
     @staticmethod
     def connect(hostname, dbname, username, pwd):
         db_connection = None
         try:
-            db_connection = psycopg2.connect(host = hostname, database = dbname, user = username, password = pwd)
+            db_connection = psycopg2.connect(host=hostname, database=dbname, user=username, password=pwd)
             print("Connected to database {} at {}, with user {}".format(dbname, hostname, username))
             return db_connection
         except:
@@ -35,13 +39,15 @@ class database:
 
     @staticmethod
     def upload_table(table, name, engine, schema_name):
-        engine = sqlalchemy.create_engine(engine) #, connect_args = {'schema':'sources'})
+        engine = sqlalchemy.create_engine(engine)
+        engine.execute('CREATE SCHEMA IF NOT EXISTS ' + schema_name + ';')
 
         try:
-            table.to_sql(name, engine, schema = schema_name, if_exists='replace', dtype = {'classification':sqlalchemy.types.JSON})
+            table.to_sql(name, engine, schema=schema_name, if_exists='replace',
+                         dtype={'classification': sqlalchemy.types.JSON})
         except Exception as e:
             print("ERROR! Cannot upload {}. Error: {}".format(name, str(e)))
-                
+
         print('Uploaded {}'.format(name))
 
     @staticmethod
@@ -52,7 +58,7 @@ class database:
         result = psql.read_sql(sql_query, connection)
         print("Executed SQL Command")
         return result
-        
+
     @staticmethod
     def upload_data(dataset, epsg):
         engine = sqlalchemy.create_engine('postgresql://$$USER$$:$$PASSWORD$$@$$IP$$/$$DB$$')
@@ -64,10 +70,11 @@ class database:
             content['geom'] = content['geometry'].apply(lambda x: geoalchemy2.WKTElement(x.wkt, srid=epsg))
             content.drop('geometry', 1, inplace=True)
             try:
-                content.to_sql(dataset['name'], engine, if_exists='replace', index=False, dtype={'geom': geoalchemy2.Geometry(geometry_type, srid=epsg)})
+                content.to_sql(dataset['name'], engine, if_exists='replace', index=False,
+                               dtype={'geom': geoalchemy2.Geometry(geometry_type, srid=epsg)})
             except Exception as e:
                 print("ERROR! Cannot upload {}. Error: {}".format(dataset['name'], str(e)))
-                    
+
             print('Uploaded {}'.format(dataset['name']))
 
         else:
@@ -75,8 +82,18 @@ class database:
                 content.to_sql(dataset['name'], engine, if_exists='replace')
             except Exception as e:
                 print("ERROR! Cannot upload {}. Error: {}".format(dataset['name'], str(e)))
-                
+
             print('Uploaded {}'.format(dataset['name']))
 
+    @staticmethod
+    def retrieve_table(name, engine, schema_name):
+        engine = sqlalchemy.create_engine(engine)
+        try:
+            engine.ta
 
+
+                to_sql(name, engine, schema=schema_name, if_exists='replace',
+                         dtype={'classification': sqlalchemy.types.JSON})
+        except Exception as e:
+            print("ERROR! Cannot upload {}. Error: {}".format(name, str(e)))
 
