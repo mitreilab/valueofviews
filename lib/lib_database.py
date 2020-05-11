@@ -52,7 +52,7 @@ class database:
 
     @staticmethod
     def execute(connection, sql_query):
-        if connection == None:
+        if connection is None:
             print("No connection given.")
             return None
         result = psql.read_sql(sql_query, connection)
@@ -86,14 +86,11 @@ class database:
             print('Uploaded {}'.format(dataset['name']))
 
     @staticmethod
-    def retrieve_table(name, engine, schema_name):
+    def retrieve_table(table_name, engine, schema_name):
         engine = sqlalchemy.create_engine(engine)
         try:
-            engine.ta
-
-
-                to_sql(name, engine, schema=schema_name, if_exists='replace',
-                         dtype={'classification': sqlalchemy.types.JSON})
+            query = 'SELECT * FROM' + table_name + ";"
+            return pandas.read_sql_table(table_name, engine, schema_name)
         except Exception as e:
-            print("ERROR! Cannot upload {}. Error: {}".format(name, str(e)))
+            print("ERROR! Cannot retrieve {}. Error: {}".format(table_name, str(e)))
 
